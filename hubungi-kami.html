@@ -3738,7 +3738,7 @@ Juara euyy Dakota cargo disini."</p>
                         <div class="form-group">
                             <textarea name="contact-message" id="contactMessage" placeholder="Tuliskan pesan atau kebutuhan Anda..." rows="5" required=""></textarea>
                         </div>
-                        <button type="button" class="btn-submit" onclick="window.open('mailto:cs@dakotacargo.co.id?subject=Pesan dari ' + encodeURIComponent(document.getElementById('contactName').value) + ' (' + encodeURIComponent(document.getElementById('contactEmail').value) + ')&amp;body=' + encodeURIComponent(document.getElementById('contactMessage').value),'_self')">
+                        <button type="button" class="btn-submit" onclick="var f=document.getElementById('contactForm'); if (!f.reportValidity()) return; window.location.href='mailto:cs@dakotacargo.co.id?subject=Pesan dari ' + encodeURIComponent(document.getElementById('contactName').value) + ' (' + encodeURIComponent(document.getElementById('contactEmail').value) + ')&amp;body=' + encodeURIComponent(document.getElementById('contactMessage').value)">
                             <i class="fas fa-paper-plane"></i> Kirim Pesan
                         </button>
                     </form>
@@ -4859,7 +4859,8 @@ Juara euyy Dakota cargo disini."</p>
                         var response = xhr.responseText;
                         // Check if response contains error
                         if (response.indexOf('tracking-error') > -1) {
-                            verifyMsg.innerHTML = '<span class="verify-error">' + response + '</span>';
+                            verifyMsg.textContent = response;
+                            verifyMsg.className = 'verify-error';
                         } else {
                             // Success - show detail and hide verify section
                             detailContainer.innerHTML = DOMPurify.sanitize(response);
@@ -4990,8 +4991,11 @@ Juara euyy Dakota cargo disini."</p>
     (function() {
         document.querySelectorAll('.navbar-links a[data-anchor]').forEach(function(link) {
             link.addEventListener('click', function(e) {
+                var href = this.getAttribute('href') || '';
+                // Only intercept in-page links; let links to other HTML pages navigate normally.
+                if (href.indexOf('#') === -1) return;
                 var anchor = this.getAttribute('data-anchor');
-                var target = document.querySelector(anchor);
+                var target = anchor ? document.querySelector(anchor) : null;
                 if (target) {
                     e.preventDefault();
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
